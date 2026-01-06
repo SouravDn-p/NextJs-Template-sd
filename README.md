@@ -31,31 +31,6 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 
 ## Deploy on Vercel
 
-## Using this as a team template
-
-This repo is structured to be reused:
-
-- Opinionated tooling: ESLint (flat), Prettier (with Tailwind plugin), Husky + lint-staged, Commitlint
-- Testing: Vitest + React Testing Library + jsdom
-- Env validation with `zod` in `src/env.ts` (copy `.env.example` to `.env.local`)
-- CI: GitHub Actions workflow (`.github/workflows/ci.yml`)
-
-Common scripts:
-
-- `npm run dev` – start dev server
-- `npm run lint` – ESLint check
-- `npm run format` / `format:check` – Prettier
-- `npm run test` / `test:ci` – run tests (with coverage in CI)
-- `npm run typecheck` – TypeScript project check
-- `npm run build` – production build
-
-To use as a new project:
-
-1. Create a new repo from this template (or `degit` it)
-2. Update `package.json` name, `README`, and licensing
-3. Fill `.env.local` using `.env.example`
-4. Push to your org and open a PR to verify CI passes
-
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
