@@ -4,7 +4,7 @@ import uiReducer from "../features/slice/uiSlice";
 import { baseApi } from "../features/api/baseApi";
 
 // Create store function
-export const makeStore = () => {
+export const makeStore = (preloadedState = {}) => {
   return configureStore({
     reducer: {
       auth: authReducer,
@@ -13,11 +13,12 @@ export const makeStore = () => {
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware().concat(baseApi.middleware),
+    preloadedState,
   });
 };
 
 // Initialize store
-let store: ReturnType<typeof makeStore> | undefined;
+let store: ReturnType<typeof makeStore>;
 
 export const getStore = () => {
   if (typeof window === "undefined") {

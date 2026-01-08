@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "@/redux/store/hooks";
-import { toggleTheme, setTheme } from "@/redux/features/slice/uiSlice";
+import { toggleTheme } from "@/redux/features/slice/uiSlice";
 
 export const useTheme = () => {
   const { theme } = useAppSelector((state) => state.ui);
@@ -9,13 +9,8 @@ export const useTheme = () => {
     dispatch(toggleTheme());
   };
 
-  const setCurrentTheme = (theme: "light" | "dark") => {
-    dispatch(setTheme(theme));
-  };
-
   return {
     theme,
     toggleCurrentTheme,
-    setCurrentTheme,
   };
 };

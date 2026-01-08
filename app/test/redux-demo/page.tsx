@@ -18,7 +18,6 @@ export default function ReduxDemoPage() {
     // Simulate a login with demo credentials
     dispatch(
       setCredentials({
-        accessToken: "demo-token-12345",
         user: {
           _id: "demo-user-1",
           name: "Demo User",

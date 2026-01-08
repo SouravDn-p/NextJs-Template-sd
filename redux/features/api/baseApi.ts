@@ -1,27 +1,24 @@
-import { RootState } from "@/redux/store/store";
+import { getSession } from "next-auth/react";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+
+// Create a dynamic baseQuery that handles SSR properly
+const dynamicBaseQuery = fetchBaseQuery({
+  baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000/api",
+  prepareHeaders: async (headers) => {
+    // Check if we're in the browser environment
+    if (typeof window !== "undefined") {
+      const session = await getSession();
+      if (session?.accessToken) {
+        headers.set("authorization", `${session.accessToken}`);
+      }
+    }
+    return headers;
+  },
+});
 
 export const baseApi = createApi({
   reducerPath: "baseApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl:
-      process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000/api",
-    prepareHeaders: (headers, { getState }) => {
-      // Handle SSR case where store may not be available
-      try {
-        const state = getState() as RootState;
-        const token = state.auth.accessToken;
-
-        if (token) {
-          headers.set("authorization", `${token}`);
-        }
-      } catch (error) {
-        // Silently handle errors during SSR
-        console.warn("Could not access store during SSR:", error);
-      }
-      return headers;
-    },
-  }),
+  baseQuery: dynamicBaseQuery,
   tagTypes: ["User", "Products"],
   endpoints: () => ({}),
 });

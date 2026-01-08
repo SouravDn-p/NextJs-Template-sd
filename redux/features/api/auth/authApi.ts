@@ -32,7 +32,6 @@ export const authApi = baseApi.injectEndpoints({
           };
           dispatch(
             setCredentials({
-              accessToken: data.accessToken,
               user: transformedUser,
             })
           );

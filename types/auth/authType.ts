@@ -35,7 +35,6 @@ export interface RegisterResponse {
 
 // Auth state interface
 export interface AuthState {
-  accessToken: string | null;
   user: import("../user/userType").User | null;
 }
 
