@@ -1,10 +1,10 @@
-"use client";
-
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/Button";
 import { useLoginMutation } from "@/redux/features/api/auth/authApi";
 import { useAuth } from "@/hooks/useAuth";
+import { LoginPayload } from "@/types/auth/authType";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -25,10 +25,21 @@ export default function LoginPage() {
     setError("");
 
     try {
-      await login({ email, password }).unwrap();
-      router.push("/"); // Redirect to home after successful login
-    } catch (err: any) {
-      setError(err.data?.message || "Login failed");
+      // Use NextAuth to sign in
+      const result = await signIn("credentials", {
+        email,
+        password,
+        redirect: false, // Prevent automatic redirect
+      });
+
+      if (result?.error) {
+        setError(result.error);
+      } else {
+        // Successful login, redirect to home
+        router.push("/");
+      }
+    } catch (err) {
+      setError("Login failed");
     }
   };
 
@@ -89,10 +100,10 @@ export default function LoginPage() {
 
           <div>
             <Button
-              type="submit"
               text={isLoading ? "Signing in..." : "Sign in"}
               variant="primary"
               className="w-full"
+              onClick={handleSubmit}
               disabled={isLoading}
             />
           </div>
@@ -100,7 +111,7 @@ export default function LoginPage() {
 
         <div className="text-center">
           <p className="text-sm text-muted-foreground">
-            Don't have an account?{" "}
+            Don{"'"}t have an account?{" "}
             <a
               href="/register"
               className="font-medium text-primary hover:text-primary/90"

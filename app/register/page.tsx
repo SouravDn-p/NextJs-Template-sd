@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/Button";
 import { useRegisterMutation } from "@/redux/features/api/auth/authApi";
+import { RegisterPayload } from "@/types/auth/authType";
 
 export default function RegisterPage() {
   const [name, setName] = useState("");
@@ -26,13 +28,20 @@ export default function RegisterPage() {
     }
 
     try {
-      await register({ name, email, password }).unwrap();
+      // Register user via API
+      const registerData: RegisterPayload = { name, email, password };
+      await register(registerData).unwrap();
+
       setSuccess("Registration successful! Please sign in.");
+      // Redirect to login after a delay
       setTimeout(() => {
         router.push("/login");
       }, 2000);
-    } catch (err: any) {
-      setError(err.data?.message || "Registration failed");
+    } catch (err) {
+      const errorResponse = err as { data?: { message?: string } };
+      const errorMessage =
+        errorResponse?.data?.message || "Registration failed";
+      setError(errorMessage);
     }
   };
 
@@ -137,10 +146,10 @@ export default function RegisterPage() {
 
           <div>
             <Button
-              type="submit"
               text={isLoading ? "Creating account..." : "Create Account"}
               variant="primary"
               className="w-full"
+              onClick={handleSubmit}
               disabled={isLoading}
             />
           </div>

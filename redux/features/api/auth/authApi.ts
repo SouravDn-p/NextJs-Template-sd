@@ -1,34 +1,13 @@
 import { baseApi } from "../baseApi";
 import { setCredentials } from "../../slice/authSlice";
 import { User } from "@/types/user/userType";
-
-// Define the payload and response types
-interface LoginPayload {
-  email: string;
-  password: string;
-}
-
-interface RegisterPayload {
-  name: string;
-  email: string;
-  password: string;
-}
-
-interface ApiUser {
-  _id: string;
-  name: string;
-  email: string;
-}
-
-interface LoginResponse {
-  accessToken: string;
-  user: ApiUser;
-}
-
-interface RegisterResponse {
-  message: string;
-  user: ApiUser;
-}
+import {
+  LoginPayload,
+  RegisterPayload,
+  ApiUser,
+  LoginResponse,
+  RegisterResponse,
+} from "@/types/auth/authType";
 
 export const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({

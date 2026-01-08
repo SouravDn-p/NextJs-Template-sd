@@ -13,6 +13,7 @@ export type ButtonProps = {
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   icon?: React.ReactNode;
   iconPosition?: "left" | "right";
+  disabled?: boolean;
 };
 
 const base =
@@ -44,13 +45,20 @@ export const Button: React.FC<ButtonProps> = ({
   onClick,
   icon,
   iconPosition = "left",
+  disabled,
 }) => {
   if (href) {
     // Render as <a>
     return (
       <Link
-        href={href}
-        className={cn(base, variants[variant], sizes[size], className)}
+        href={disabled ? "#" : href}
+        className={cn(
+          base,
+          variants[variant],
+          sizes[size],
+          className,
+          disabled ? "opacity-50 cursor-not-allowed pointer-events-none" : ""
+        )}
       >
         {icon && iconPosition === "left" && (
           <span className="mr-2">{icon}</span>
@@ -67,7 +75,14 @@ export const Button: React.FC<ButtonProps> = ({
   return (
     <button
       onClick={onClick}
-      className={cn(base, variants[variant], sizes[size], className)}
+      disabled={disabled}
+      className={cn(
+        base,
+        variants[variant],
+        sizes[size],
+        className,
+        disabled ? "opacity-50 cursor-not-allowed" : ""
+      )}
     >
       {icon && iconPosition === "left" && <span className="mr-2">{icon}</span>}
       {text}

@@ -95,6 +95,47 @@ pnpm start
 ├── tsconfig.json
 ```
 
+## Authentication Architecture
+
+This template implements a robust authentication system using NextAuth.js for authentication and sessions, with Redux for managing user information and UI state:
+
+- **NextAuth.js**: Handles authentication, sessions, and secure server-aware authentication
+- **JWT Strategy**: Token-based authentication with secure JWT handling
+- **Redux Store**: Manages user info, roles, and UI state
+- **Middleware Protection**: Route protection via Next.js middleware
+
+### How It Works
+
+1. **Authentication Flow**: NextAuth.js handles user authentication via credentials provider
+2. **Session Management**: Secure server-aware sessions managed by NextAuth
+3. **Redux State**: User information and UI state managed by Redux store
+4. **Synchronization**: Session changes automatically sync to Redux store
+5. **Route Protection**: Middleware protects private routes
+
+## Types Organization
+
+This template includes a well-organized types system for better type safety and maintainability:
+
+- **Authentication Types**: Located in `types/auth/` - Contains authentication-related interfaces and types
+- **User Types**: Located in `types/user/` - Contains user-related interfaces and types
+- **Common Types**: Located in `types/common/` - Contains general-purpose interfaces used across the application
+
+### Folder Structure
+
+```
+├── types/
+│   ├── auth/
+│   │   ├── authType.ts    # Authentication-related types (LoginPayload, RegisterPayload, etc.)
+│   │   └── index.ts       # Export for easy imports
+│   ├── common/
+│   │   ├── commonType.ts  # General-purpose types (ApiResponse, Pagination, etc.)
+│   │   └── index.ts       # Export for easy imports
+│   ├── user/
+│   │   ├── userType.ts    # User-related types (User interface)
+│   │   └── index.ts       # Export for easy imports
+│   └── index.ts          # Main export for all types
+```
+
 ## Redux Setup
 
 This template includes a professional Redux Toolkit setup with RTK Query for state management and API integration:
