@@ -97,64 +97,104 @@ pnpm start
 
 ## Redux Setup
 
-This template includes Redux Toolkit for state management. To set up Redux:
+This template includes a professional Redux Toolkit setup with RTK Query for state management and API integration:
 
-1. Create a store in `store/index.ts`:
+- **Redux Store**: Centralized state management with type safety
+- **RTK Query**: Advanced data fetching and caching solution
+- **Authentication Slice**: User authentication state management
+- **UI Slice**: Theme and UI state management
+- **API Integration**: Automatic caching, background refetching, and request deduplication
+
+### Folder Structure
+
+```
+├── redux/
+│   ├── features/
+│   │   ├── api/
+│   │   │   ├── baseApi.ts      # Base API configuration
+│   │   │   └── auth/
+│   │   │       └── authApi.ts  # Authentication API endpoints
+│   │   └── slice/
+│   │       ├── authSlice.ts    # Authentication state
+│   │       └── uiSlice.ts      # UI state (theme, language)
+│   └── store/
+│       ├── store.ts          # Main store configuration
+│       └── hooks.ts          # Typed hooks for useSelector/dispatch
+├── hooks/
+│   ├── useAuth.ts            # Authentication hook
+│   └── useTheme.ts           # Theme management hook
+└── providers/
+    └── ReduxProvider.tsx     # Redux Provider wrapper
+```
+
+### Professional Implementation
+
+The Redux setup includes:
+
+1. **Typed Store Configuration** (`redux/store/store.ts`):
 
 ```typescript
 import { configureStore } from "@reduxjs/toolkit";
-import { setupListeners } from "@reduxjs/toolkit/query";
-import { apiSlice } from "./api/apiSlice";
+import authReducer from "../features/slice/authSlice";
+import uiReducer from "../features/slice/uiSlice";
+import { baseApi } from "../features/api/baseApi";
 
 export const store = configureStore({
   reducer: {
-    [apiSlice.reducerPath]: apiSlice.reducer,
+    auth: authReducer,
+    ui: uiReducer,
+    [baseApi.reducerPath]: baseApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(apiSlice.middleware),
+    getDefaultMiddleware().concat(baseApi.middleware),
 });
-
-setupListeners(store.dispatch);
-export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
 ```
 
-2. Create API slices for data fetching:
+2. **RTK Query API Integration** (`redux/features/api/baseApi.ts`):
 
 ```typescript
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-export const apiSlice = createApi({
-  reducerPath: "api",
-  baseQuery: fetchBaseQuery({ baseUrl: "/api" }),
-  tagTypes: ["User", "Post"],
-  endpoints: (builder) => ({
-    // Define your endpoints here
+export const baseApi = createApi({
+  reducerPath: "baseApi",
+  baseQuery: fetchBaseQuery({
+    baseUrl:
+      process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000/api",
+    prepareHeaders: (headers, { getState }) => {
+      const token = getState().auth.accessToken;
+      if (token) {
+        headers.set("authorization", `${token}`);
+      }
+      return headers;
+    },
   }),
+  tagTypes: ["User", "Products"],
+  endpoints: () => ({}),
 });
 ```
 
-3. Wrap your app with Provider in `app/layout.tsx`:
+3. **Authentication Slice** (`redux/features/slice/authSlice.ts`):
 
-```tsx
-"use client";
-import { Provider } from "react-redux";
-import { store } from "@/store";
-
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return (
-    <Provider store={store}>
-      <html lang="en">
-        <body>{children}</body>
-      </html>
-    </Provider>
-  );
-}
+```typescript
+const authSlice = createSlice({
+  name: "auth",
+  initialState,
+  reducers: {
+    setCredentials: (state, action) => {
+      state.accessToken = action.payload.accessToken;
+      state.user = action.payload.user;
+    },
+    logOut: (state) => {
+      state.accessToken = null;
+      state.user = null;
+    },
+  },
+});
 ```
+
+4. **Wrapped in Provider** (`app/layout.tsx`):
+
+The Redux store is automatically wrapped around the entire application through the root layout.
 
 ## Color Variables
 
