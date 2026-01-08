@@ -3,15 +3,35 @@ import authReducer from "../features/slice/authSlice";
 import uiReducer from "../features/slice/uiSlice";
 import { baseApi } from "../features/api/baseApi";
 
-export const store = configureStore({
-  reducer: {
-    auth: authReducer,
-    ui: uiReducer,
-    [baseApi.reducerPath]: baseApi.reducer,
-  },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(baseApi.middleware),
-});
+// Create store function
+export const makeStore = () => {
+  return configureStore({
+    reducer: {
+      auth: authReducer,
+      ui: uiReducer,
+      [baseApi.reducerPath]: baseApi.reducer,
+    },
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware().concat(baseApi.middleware),
+  });
+};
 
-export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
+// Initialize store
+let store: ReturnType<typeof makeStore> | undefined;
+
+export const getStore = () => {
+  if (typeof window === "undefined") {
+    // Server side - create a new store for each request
+    return makeStore();
+  } else {
+    // Client side - create store once
+    if (!store) {
+      store = makeStore();
+    }
+    return store;
+  }
+};
+
+// Types
+export type RootState = ReturnType<ReturnType<typeof makeStore>["getState"]>;
+export type AppDispatch = ReturnType<typeof makeStore>["dispatch"];

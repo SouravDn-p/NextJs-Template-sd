@@ -1,7 +1,7 @@
 "use client";
 
 import { Provider } from "react-redux";
-import { store } from "@/redux/store/store";
+import { getStore } from "@/redux/store/store";
 import { useEffect } from "react";
 import { hydrateAuthState } from "@/lib/auth-utils";
 import { useSessionSync } from "@/hooks/useSessionSync";
@@ -13,8 +13,18 @@ function ReduxProviderWrapper({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     // Hydrate the store with persisted data on initial render
-    store.dispatch(hydrateAuthState());
+    if (typeof window !== "undefined") {
+      const store = getStore();
+      store.dispatch(hydrateAuthState());
+    }
   }, []);
+
+  // Use the store instance
+  const store = typeof window !== "undefined" ? getStore() : null;
+
+  if (!store) {
+    return <>{children}</>;
+  }
 
   return <Provider store={store}>{children}</Provider>;
 }

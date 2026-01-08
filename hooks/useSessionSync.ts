@@ -12,7 +12,20 @@ export const useSessionSync = () => {
   useEffect(() => {
     if (status === "authenticated" && session) {
       // Sync session data to Redux store
-      dispatch(setSession({ session }));
+      const sessionUser = session.user;
+      dispatch(
+        setSession({
+          session: {
+            user: {
+              id: sessionUser?.id,
+              name: sessionUser?.name ?? undefined,
+              email: sessionUser?.email ?? undefined,
+              role: (sessionUser as { role?: string })?.role,
+            },
+            accessToken: (session as { accessToken?: string })?.accessToken,
+          },
+        })
+      );
     } else if (status === "unauthenticated") {
       // Clear Redux store when user logs out
       dispatch(logOut());

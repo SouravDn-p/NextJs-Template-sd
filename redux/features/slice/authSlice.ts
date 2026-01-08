@@ -5,13 +5,16 @@ import { AuthState } from "@/types/auth/authType";
 
 // Try to load initial state from localStorage
 const loadInitialState = (): AuthState => {
-  try {
-    const stored = localStorage.getItem("nextjs_template_auth");
-    if (stored) {
-      return JSON.parse(stored);
+  // Check if we're in the browser environment
+  if (typeof window !== "undefined") {
+    try {
+      const stored = localStorage.getItem("nextjs_template_auth");
+      if (stored) {
+        return JSON.parse(stored);
+      }
+    } catch (error) {
+      console.error("Failed to load auth state from storage:", error);
     }
-  } catch (error) {
-    console.error("Failed to load auth state from storage:", error);
   }
 
   return {

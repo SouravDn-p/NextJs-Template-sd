@@ -3,6 +3,7 @@
 import { useSession } from "next-auth/react";
 import { useAppSelector } from "@/redux/store/hooks";
 import { User } from "@/types/user/userType";
+import type { RootState } from "@/redux/store/store";
 
 export const useAuthStatus = () => {
   const { data: session, status } = useSession();
