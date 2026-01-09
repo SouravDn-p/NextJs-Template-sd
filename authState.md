@@ -24,7 +24,7 @@ Many developers struggle with where to put auth state. We solve this by separati
 2.  **Session**: NextAuth creates a secure HTTP-only cookie.
 3.  **Sync**: The `<AuthSync />` component detects the session and dispatches user info to Redux.
 4.  **UI**: Components read user data from Redux (`useAppSelector`).
-5.  **API**: RTK Query fetches data, dynamically attaching the token from the NextAuth session.
+5.  **API**: RTK Query fetches data, dynamically attaching the Bearer token from the NextAuth session with credentials included.
 
 ---
 
@@ -80,7 +80,7 @@ The nesting order is strictly required for the sync to work:
   {/* 1. NextAuth Context */}
   <ReduxProvider>
     {" "}
-    {/* 2. Redux Store */}
+    {/* 2. Redux Store - Uses useMemo for proper initialization */}
     <AuthSync /> {/* 3. The Bridge (Needs both contexts) */}
     {children} {/* 4. Your App */}
   </ReduxProvider>
@@ -97,10 +97,13 @@ We **do not** read the token from Redux. Instead, we use `getSession()` to dynam
 prepareHeaders: async (headers) => {
   const session = await getSession(); // Fetch secure session
   if (session?.accessToken) {
-    headers.set("authorization", `${session.accessToken}`);
+    headers.set("authorization", `Bearer ${session.accessToken}`);
   }
   return headers;
 };
+
+// Include credentials for cross-origin requests
+credentials: "include";
 ```
 
 ### 6. Middleware Protection

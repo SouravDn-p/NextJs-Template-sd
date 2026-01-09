@@ -4,7 +4,6 @@ import { User } from "@/types/user/userType";
 import {
   LoginPayload,
   RegisterPayload,
-  ApiUser,
   LoginResponse,
   RegisterResponse,
 } from "@/types/auth/authType";
@@ -25,7 +24,8 @@ export const authApi = baseApi.injectEndpoints({
           const transformedUser: User = {
             _id: data.user._id,
             name: data.user.name,
-            phone: data.user.email, // Using email as phone for demo purposes
+            phone: (data.user as { phone?: string }).phone || data.user.email,
+            email: data.user.email,
             roles: ["USER"], // Default role after login
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
@@ -55,7 +55,8 @@ export const authApi = baseApi.injectEndpoints({
           const transformedUser: User = {
             _id: data.user._id,
             name: data.user.name,
-            phone: data.user.email, // Using email as phone for demo purposes
+            phone: (data.user as { phone?: string }).phone || data.user.email,
+            email: data.user.email,
             roles: ["USER"], // Default role after registration
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),

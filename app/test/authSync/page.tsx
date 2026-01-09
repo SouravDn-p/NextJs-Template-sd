@@ -16,7 +16,11 @@ export default function AuthSync() {
           user: {
             _id: session.user.id || "",
             name: session.user.name || "",
-            phone: session.user.email || "",
+            phone:
+              (session.user as { phone?: string }).phone ||
+              session.user.email ||
+              "",
+            email: session.user.email || "",
             roles: [
               session.user.role === "ADMIN" || session.user.role === "MODERATOR"
                 ? (session.user.role as "ADMIN" | "MODERATOR")

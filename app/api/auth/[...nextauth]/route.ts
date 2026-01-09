@@ -19,6 +19,7 @@ const authConfig: AuthOptions = {
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
+            credentials: "include", // Include cookies for cross-origin requests
             body: JSON.stringify({
               email: credentials?.email,
               password: credentials?.password,
@@ -28,13 +29,19 @@ const authConfig: AuthOptions = {
 
         const data = await res.json();
 
-        if (!res.ok || !data?.user) return null;
+        if (!res.ok || !data?.user) {
+          console.error(
+            "Authentication failed:",
+            data?.message || "Invalid credentials"
+          );
+          return null;
+        }
 
         // Return user object with required fields
         return {
           id: data.user._id,
           name: data.user.name,
-          email: data.user.phone, // Using phone as email for this example
+          email: data.user.email, // Use actual email from the user object
           role: data.user.roles?.[0] || "USER",
           accessToken: data.accessToken,
         };

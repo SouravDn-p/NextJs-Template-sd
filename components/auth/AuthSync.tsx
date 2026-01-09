@@ -19,8 +19,9 @@ export default function AuthSync() {
           user: {
             _id: session.user.id,
             name: session.user.name || "",
-            phone: session.user.email || "", // Mapping email to phone as per project convention
+            phone: session.user.email || "", // Use email as phone since NextAuth session doesn't have phone property
             roles: [role],
+            email: session.user.email || "",
             createdAt: new Date().toISOString(), // Placeholder as session doesn't have this
             updatedAt: new Date().toISOString(), // Placeholder as session doesn't have this
           },

@@ -85,7 +85,7 @@ pnpm start
 ├── components/             # Reusable components
 │   └── layout/admin/       # Admin layout components
 ├── public/                 # Static assets
-├── store/                  # Redux store (to be added)
+├── redux/                  # Redux Toolkit store and RTK Query API
 ├── types/                  # TypeScript type definitions
 ├── utils/                  # Utility functions
 ├── README.md
@@ -152,7 +152,7 @@ This template includes a professional Redux Toolkit setup with RTK Query for sta
 ├── redux/
 │   ├── features/
 │   │   ├── api/
-│   │   │   ├── baseApi.ts      # Base API configuration
+│   │   │   ├── baseApi.ts      # Base API configuration with NextAuth integration
 │   │   │   └── auth/
 │   │   │       └── authApi.ts  # Authentication API endpoints
 │   │   └── slice/
@@ -164,8 +164,12 @@ This template includes a professional Redux Toolkit setup with RTK Query for sta
 ├── hooks/
 │   ├── useAuth.ts            # Authentication hook
 │   └── useTheme.ts           # Theme management hook
-└── providers/
-    └── ReduxProvider.tsx     # Redux Provider wrapper
+├── providers/
+│   ├── AppProviders.tsx      # Combined providers for NextAuth and Redux
+│   └── ReduxProvider.tsx     # Redux Provider wrapper with proper store initialization
+├── components/
+│   └── auth/
+│       └── AuthSync.tsx      # Component to sync NextAuth session with Redux state
 ```
 
 ### Professional Implementation
@@ -201,10 +205,11 @@ export const baseApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl:
       process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000/api",
-    prepareHeaders: (headers, { getState }) => {
-      const token = getState().auth.accessToken;
-      if (token) {
-        headers.set("authorization", `${token}`);
+    credentials: "include", // Include credentials for cross-origin requests
+    prepareHeaders: async (headers) => {
+      const session = await getSession(); // Get NextAuth session
+      if (session?.accessToken) {
+        headers.set("authorization", `Bearer ${session.accessToken}`); // Use Bearer token format
       }
       return headers;
     },

@@ -22,6 +22,7 @@ export default function ReduxDemoPage() {
           _id: "demo-user-1",
           name: "Demo User",
           phone: "+1234567890",
+          email: "demo@example.com",
           roles: ["USER"],
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
