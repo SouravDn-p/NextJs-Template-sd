@@ -21,7 +21,7 @@ export default function Banner() {
 
       {/* Content */}
       <div className="relative z-10 mx-auto max-w-4xl px-6 text-center">
-        <h1 className="mb-6 bg-gradient-to-r from-primary to-accent bg-clip-text text-4xl md:text-6xl font-bold text-transparent">
+        <h1 className="mb-6 bg-gradient-to-r from-primary to-accent bg-clip-text text-4xl md:text-6xl font-bold text-primary">
           Modern NextJS 16 Template
         </h1>
         <p className="mx-auto mb-8 max-w-2xl text-lg leading-relaxed text-muted-foreground">

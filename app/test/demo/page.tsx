@@ -1,5 +1,11 @@
 import { Button } from "@/components/ui/Button";
 import Link from "next/link";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Demo - Next JS 16 Template",
+  description: "Demo page for the Next.js 16 template application",
+};
 
 export default function DemoPage() {
   return (

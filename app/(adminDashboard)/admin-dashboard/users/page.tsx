@@ -1,4 +1,10 @@
 import React from "react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Users Management - Next JS 16 Template",
+  description: "Manage users in the Next.js 16 template application",
+};
 
 export default function AdminUsers() {
   return (

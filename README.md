@@ -1,4 +1,4 @@
-# Next.js 16 Template with TypeScript and Redux
+# Next.js 16 Template with TypeScript and Redux and NextAuth.js
 
 A modern Next.js 16 template featuring TypeScript, Redux Toolkit, Tailwind CSS, and essential configurations for scalable applications.
 

@@ -1,4 +1,11 @@
 import { Button } from "@/components/ui/Button";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Contact Us - Next JS 16 Template",
+  description:
+    "Get in touch with us through our Next.js 16 template with TypeScript and Tailwind CSS",
+};
 
 export default function ContactPage() {
   return (

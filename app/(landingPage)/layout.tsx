@@ -13,10 +13,10 @@ export default function LandingLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <>
       <Navbar />
-      <body className="pt-12">{children}</body>
+      <main className="pt-12">{children}</main>
       <Footer />
-    </html>
+    </>
   );
 }

@@ -8,7 +8,7 @@ export type ButtonProps = {
   text: string;
   href?: string;
   variant?: "primary" | "secondary" | "ghost" | "outline" | "common";
-  size?: "sm" | "md" | "lg";
+  size?: "sm" | "md" | "lg" | "icon";
   className?: string;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   icon?: React.ReactNode;
@@ -34,6 +34,7 @@ const sizes: Record<NonNullable<ButtonProps["size"]>, string> = {
   sm: "h-9 px-3 text-sm",
   md: "h-10 px-4 text-sm",
   lg: "h-11 px-6 text-base",
+  icon: "h-10 w-10",
 };
 
 export const Button: React.FC<ButtonProps> = ({
