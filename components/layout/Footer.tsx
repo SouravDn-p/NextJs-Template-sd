@@ -1,19 +1,30 @@
+import Image from "next/image";
 import Link from "next/link";
 
-export function Footer() {
+export async function Footer() {
+  console.log("Generated  Footer");
   return (
     <footer className="border-t border-border bg-background text-foreground">
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
           <div>
-            <div className="flex items-center gap-2 mb-4">
-              <div className="flex h-6 w-6 items-center justify-center rounded-md bg-gradient-to-br from-primary to-accent">
-                <div className="h-4 w-4 text-primary-foreground" />
+            <Link
+              href="/"
+              className="flex items-center hover:scale-105 transition-transform duration-200 cursor-pointer"
+            >
+              <div className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center">
+                <Image
+                  src="/images/cliste-logo.png"
+                  alt="Cliste"
+                  width={40}
+                  height={40}
+                  className="w-full h-full object-contain"
+                />
               </div>
               <span className="text-lg font-semibold text-foreground">
                 NextJS Template
               </span>
-            </div>
+            </Link>
             <p className="text-sm text-muted-foreground">
               A modern Next.js 16 template with TypeScript and Tailwind CSS.
             </p>

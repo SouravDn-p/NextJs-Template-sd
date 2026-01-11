@@ -1,22 +1,22 @@
 "use client";
 
 import {
-  Heart,
   Menu,
   X,
   User,
   LogOut,
   Settings,
   CreditCard,
+  ChevronRight,
 } from "lucide-react";
 import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useAppDispatch } from "@/redux/store/hooks";
 import { logOut } from "@/redux/features/slice/authSlice";
-import { Button } from "@/components/ui/Button";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import Image from "next/image";
+import Button from "../ui/Button";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -55,7 +55,7 @@ export default function Navbar() {
   return (
     <section className="bg-background">
       <nav className="fixed top-0 right-0 left-0 z-50 px-4 py-4 sm:px-6">
-        <div className="mx-auto flex max-w-7xl items-center justify-between rounded-full bg-white/10 px-4 py-3 shadow-sm backdrop-blur-sm sm:px-8 sm:py-4 border ">
+        <div className="relative mx-auto flex max-w-7xl items-center justify-between rounded-full bg-white/10 px-4 py-3 shadow-sm backdrop-blur-sm sm:px-8 sm:py-4 border ">
           {/* Logo */}
           <Link
             href="/"
@@ -67,7 +67,7 @@ export default function Navbar() {
                 alt="Cliste"
                 width={40}
                 height={40}
-                className="w-full h-full object-contain"
+                className="w-full h-full object-contain text-foreground "
               />
             </div>
             <span className="text-lg font-semibold text-foreground">
@@ -75,21 +75,8 @@ export default function Navbar() {
             </span>
           </Link>
 
-          {/* Hamburger Button for Mobile */}
-          <button
-            className="text-foreground focus:outline-none sm:hidden"
-            onClick={toggleMenu}
-            aria-label="Toggle menu"
-          >
-            {isMenuOpen ? (
-              <X className="h-6 w-6 cursor-pointer" />
-            ) : (
-              <Menu className="h-6 w-6 cursor-pointer" />
-            )}
-          </button>
-
-          {/* Navigation Links - Desktop */}
-          <div className="hidden items-center gap-8 sm:flex">
+          {/* Navigation Links - Centered */}
+          <div className="hidden sm:flex absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 items-center gap-8">
             <Link
               href="/"
               className="text-base font-medium text-foreground  transition-colors hover:text-primary"
@@ -114,95 +101,105 @@ export default function Navbar() {
             >
               Contact
             </Link>
-            <div className="flex items-center gap-3">
-              <ThemeToggle />
-              {isAuthenticated && user ? (
-                <div className="relative" ref={authDropdownRef}>
-                  <button
-                    onClick={() => setIsAuthOpen(!isAuthOpen)}
-                    className="flex items-center gap-2 rounded-full bg-muted p-1 text-base focus:outline-none focus:ring-2 focus:ring-primary"
-                    aria-expanded={isAuthOpen}
-                    aria-haspopup="true"
-                  >
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground">
-                      <User className="h-4 w-4" />
-                    </div>
-                    <span className="hidden sm:block truncate max-w-[100px] text-base font-medium">
-                      {user.name || user.email.split("@")[0]}
-                    </span>
-                  </button>
-
-                  {isAuthOpen && (
-                    <div className="absolute right-0 mt-2 w-56 origin-top-right rounded-md bg-background shadow-lg ring-1 ring-black ring-opacity-5 z-50">
-                      <div className="py-1">
-                        <div className="px-4 py-2">
-                          <p className="text-base font-medium text-foreground truncate">
-                            {user.name || "User"}
-                          </p>
-                          <p className="text-xs text-muted-foreground truncate">
-                            {user.email}
-                          </p>
-                        </div>
-
-                        <div className="border-t border-border my-1"></div>
-
-                        <Link
-                          href="/dashboard"
-                          className="flex items-center gap-2 px-4 py-2 text-base text-foreground hover:bg-muted transition-colors"
-                          onClick={() => setIsAuthOpen(false)}
-                        >
-                          <CreditCard className="h-4 w-4" />
-                          <span>Dashboard</span>
-                        </Link>
-
-                        <Link
-                          href="/profile"
-                          className="flex items-center gap-2 px-4 py-2 text-base text-foreground hover:bg-muted transition-colors"
-                          onClick={() => setIsAuthOpen(false)}
-                        >
-                          <User className="h-4 w-4" />
-                          <span>Profile</span>
-                        </Link>
-
-                        <Link
-                          href="/settings"
-                          className="flex items-center gap-2 px-4 py-2 text-base text-foreground hover:bg-muted transition-colors"
-                          onClick={() => setIsAuthOpen(false)}
-                        >
-                          <Settings className="h-4 w-4" />
-                          <span>Settings</span>
-                        </Link>
-
-                        <button
-                          onClick={handleLogout}
-                          className="flex w-full items-center gap-2 px-4 py-2 text-base text-foreground hover:bg-muted transition-colors"
-                        >
-                          <LogOut className="h-4 w-4" />
-                          <span>Sign out</span>
-                        </button>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <div className="flex items-center gap-2">
-                  <Button
-                    text="Log in"
-                    variant="outline"
-                    href="/login"
-                    size="sm"
-                  />
-                  <Button
-                    text="Sign up"
-                    variant="primary"
-                    href="/register"
-                    size="sm"
-                  />
-                </div>
-              )}
-            </div>
           </div>
-        </div>
+
+          {/* Right Side Actions */}
+          <div className="hidden sm:flex items-center gap-3">
+            <ThemeToggle />
+            {isAuthenticated && user ? (
+              <div className="relative" ref={authDropdownRef}>
+                <button
+                  onClick={() => setIsAuthOpen(!isAuthOpen)}
+                  className="flex items-center gap-2 rounded-full bg-muted p-1 text-base focus:outline-none focus:ring-2 focus:ring-primary"
+                  aria-expanded={isAuthOpen}
+                  aria-haspopup="true"
+                >
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground">
+                    <User className="h-4 w-4" />
+                  </div>
+                  <span className="hidden sm:block truncate max-w-[100px] text-base font-medium">
+                    {user.name || user.email.split("@")[0]}
+                  </span>
+                </button>
+
+                {isAuthOpen && (
+                  <div className="absolute right-0 mt-2 w-56 origin-top-right rounded-md bg-background shadow-lg ring-1 ring-black ring-opacity-5 z-50">
+                    <div className="py-1">
+                      <div className="px-4 py-2">
+                        <p className="text-base font-medium text-foreground truncate">
+                          {user.name || "User"}
+                        </p>
+                        <p className="text-xs text-muted-foreground truncate">
+                          {user.email}
+                        </p>
+                      </div>
+
+                      <div className="border-t border-border my-1"></div>
+
+                      <Link
+                        href="/dashboard"
+                        className="flex items-center gap-2 px-4 py-2 text-base text-foreground hover:bg-muted transition-colors"
+                        onClick={() => setIsAuthOpen(false)}
+                      >
+                        <CreditCard className="h-4 w-4" />
+                        <span>Dashboard</span>
+                      </Link>
+
+                      <Link
+                        href="/profile"
+                        className="flex items-center gap-2 px-4 py-2 text-base text-foreground hover:bg-muted transition-colors"
+                        onClick={() => setIsAuthOpen(false)}
+                      >
+                        <User className="h-4 w-4" />
+                        <span>Profile</span>
+                      </Link>
+
+                      <Link
+                        href="/settings"
+                        className="flex items-center gap-2 px-4 py-2 text-base text-foreground hover:bg-muted transition-colors"
+                        onClick={() => setIsAuthOpen(false)}
+                      >
+                        <Settings className="h-4 w-4" />
+                        <span>Settings</span>
+                      </Link>
+
+                      <button
+                        onClick={handleLogout}
+                        className="flex w-full items-center gap-2 px-4 py-2 text-base text-foreground hover:bg-muted transition-colors"
+                      >
+                        <LogOut className="h-4 w-4" />
+                        <span>Sign out</span>
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="flex items-center gap-2">
+                <Button text="Log in" variant="outline" href="/login" />
+                <Button
+                  text="Get Started"
+                  className="bg-white"
+                  icon={<ChevronRight size={16} />}
+                  href="/register"
+                />
+              </div>
+            )}
+          </div>
+
+          {/* Hamburger Button for Mobile */}
+          <button
+            className="text-foreground focus:outline-none sm:hidden"
+            onClick={toggleMenu}
+            aria-label="Toggle menu"
+          >
+            {isMenuOpen ? (
+              <X className="h-6 w-6 cursor-pointer" />
+            ) : (
+              <Menu className="h-6 w-6 cursor-pointer" />
+            )}
+          </button>
+         </div>
 
         {/* Mobile Menu */}
         {isMenuOpen && (
@@ -302,15 +299,15 @@ export default function Navbar() {
                     text="Log in"
                     variant="outline"
                     href="/login"
-                    size="sm"
+                    // size="sm"
                     onClick={() => setIsMenuOpen(false)}
                   />
+
                   <Button
-                    text="Sign up"
-                    variant="primary"
+                    text="Get Started"
+                    className="bg-white"
+                    icon={<ChevronRight className="w-full" />}
                     href="/register"
-                    size="sm"
-                    onClick={() => setIsMenuOpen(false)}
                   />
                 </div>
               )}

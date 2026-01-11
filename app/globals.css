@@ -4,7 +4,7 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --primary: #3ccb7f;
+  --primary: #9c27b0;
   --primary-foreground: #ffffff;
   --secondary: #64748b;
   --secondary-foreground: #ffffff;
@@ -17,13 +17,15 @@
   --border: #e2e8f0;
   --input: #e2e8f0;
   --radius: 0.5rem;
+  --gradient-start: #00e5ff;
+  --gradient-end: #9c27b0;
 }
 
 /* Dark mode */
 .dark {
   --background: #0a0a0a;
   --foreground: #edededda;
-  --primary: #3ccb7f;
+  --primary: #9c27b0;
   --primary-foreground: #ffffff;
   --secondary: #94a3b8;
   --secondary-foreground: #ffffff;
@@ -90,6 +92,14 @@
 
 .border {
   border-color: var(--border);
+}
+
+.bg-gradient-primary {
+  background: linear-gradient(
+    90deg,
+    var(--gradient-start),
+    var(--gradient-end)
+  );
 }
 
 body {

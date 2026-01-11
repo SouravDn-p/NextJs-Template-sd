@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description: "Manage users in the Next.js 16 template application",
 };
 
-export default function AdminUsers() {
+export default function AdminUsersPage() {
   return (
     <div className="max-w-full">
       <div className="mb-6">

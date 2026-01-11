@@ -1,15 +1,15 @@
 import React from "react";
 import { Bell, User } from "lucide-react";
 
-export default function AdminNavbar() {
+export default function DashboardNavbar() {
   return (
     <div className="flex items-center justify-between px-4 py-3">
       <div className="flex items-center">
         <h1 className="text-xl font-semibold text-gray-800 md:hidden">
-          Admin Panel
+          Dashboard Panel
         </h1>
         <h1 className="text-xl font-semibold text-gray-800 hidden md:block">
-          Admin Dashboard
+          Dashboard Dashboard
         </h1>
       </div>
 
@@ -24,7 +24,7 @@ export default function AdminNavbar() {
             <User className="w-4 h-4 text-gray-700" />
           </div>
           <span className="hidden md:inline text-gray-700 font-medium">
-            Admin User
+            Dashboard User
           </span>
         </div>
       </div>

@@ -1,14 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import AdminNavbar from "./AdminNavbar";
-import AdminSidebar from "./AdminSidebar";
+import DashboardNavbar from "./DashboardNavbar";
+import DashboardSidebar from "./DashboardSidebar";
 
-type AdminLayoutProps = {
+type DashboardLayoutProps = {
   children: React.ReactNode;
+  sidebar?: React.ReactNode;
 };
 
-export default function AdminLayout({ children }: AdminLayoutProps) {
+export default function DashboardLayout({
+  children,
+  sidebar,
+}: DashboardLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
@@ -27,14 +31,14 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
         md:static md:translate-x-0`}
       >
-        <AdminSidebar />
+        {sidebar || <DashboardSidebar />}
       </aside>
 
       {/* Main content */}
       <div className="flex flex-col flex-1">
         {/* Navbar */}
         <header className="sticky top-0 z-30 bg-white border-b">
-          <AdminNavbar />
+          <DashboardNavbar />
         </header>
 
         {/* Page content */}

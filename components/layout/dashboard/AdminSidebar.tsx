@@ -1,5 +1,6 @@
 import React from "react";
 import { Home, Users, BarChart3, Settings, LogOut, User } from "lucide-react";
+import Link from "next/link";
 
 export default function AdminSidebar() {
   return (
@@ -11,49 +12,40 @@ export default function AdminSidebar() {
       <nav className="flex-1 p-4">
         <ul className="space-y-2">
           <li>
-            <a
+            <Link
               href="/admin-dashboard"
               className="flex items-center p-2 text-gray-700 rounded-lg hover:bg-gray-100 group"
             >
               <Home className="w-5 h-5" />
-              <span className="ml-3">Dashboard</span>
-            </a>
+              <span className="ml-3">Overview</span>
+            </Link>
           </li>
           <li>
-            <a
+            <Link
               href="/admin-dashboard/users"
               className="flex items-center p-2 text-gray-700 rounded-lg hover:bg-gray-100 group"
             >
               <Users className="w-5 h-5" />
               <span className="ml-3">Users</span>
-            </a>
+            </Link>
           </li>
           <li>
-            <a
-              href="#"
+            <Link
+              href="/admin-dashboard/analytics"
               className="flex items-center p-2 text-gray-700 rounded-lg hover:bg-gray-100 group"
             >
               <BarChart3 className="w-5 h-5" />
               <span className="ml-3">Analytics</span>
-            </a>
+            </Link>
           </li>
           <li>
-            <a
-              href="#"
+            <Link
+              href="/admin-dashboard/settings"
               className="flex items-center p-2 text-gray-700 rounded-lg hover:bg-gray-100 group"
             >
               <Settings className="w-5 h-5" />
               <span className="ml-3">Settings</span>
-            </a>
-          </li>
-          <li>
-            <a
-              href="#"
-              className="flex items-center p-2 text-gray-700 rounded-lg hover:bg-gray-100 group"
-            >
-              <LogOut className="w-5 h-5" />
-              <span className="ml-3">Logout</span>
-            </a>
+            </Link>
           </li>
         </ul>
       </nav>

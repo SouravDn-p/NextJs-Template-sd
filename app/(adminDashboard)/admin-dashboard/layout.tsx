@@ -1,6 +1,7 @@
 "use client";
 
-import AdminLayout from "@/components/layout/admin/AdminLayout";
+import DashboardLayout from "@/components/layout/dashboard/DashboardLayout";
+import AdminSidebar from "@/components/layout/dashboard/AdminSidebar";
 
 type AdminDashboardLayoutProps = {
   children: React.ReactNode;
@@ -9,5 +10,5 @@ type AdminDashboardLayoutProps = {
 export default function AdminDashboardLayout({
   children,
 }: AdminDashboardLayoutProps) {
-  return <AdminLayout>{children}</AdminLayout>;
+  return <DashboardLayout sidebar={<AdminSidebar />}>{children}</DashboardLayout>;
 }

@@ -1,93 +1,132 @@
+"use client";
+
+import React from "react";
 import Link from "next/link";
-import * as React from "react";
 
-const cn = (...classes: Array<string | false | null | undefined>) =>
-  classes.filter(Boolean).join(" ");
-
-export type ButtonProps = {
-  text: string;
-  href?: string;
-  variant?: "primary" | "secondary" | "ghost" | "outline" | "common";
-  size?: "sm" | "md" | "lg" | "icon";
-  className?: string;
-  onClick?: React.MouseEventHandler<HTMLButtonElement>;
-  icon?: React.ReactNode;
-  iconPosition?: "left" | "right";
-  disabled?: boolean;
-};
-
-const base =
-  "inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none";
-
-const variants: Record<NonNullable<ButtonProps["variant"]>, string> = {
-  primary: "bg-primary text-background hover:opacity-90 cursor-pointer",
-  secondary: "bg-secondary text-background hover:opacity-90 cursor-pointer",
-  ghost:
-    "bg-transparent hover:bg-black/5 dark:hover:bg-white/10 cursor-pointer",
+// Define the possible variants
+const variantStyles = {
+  primary: "bg-primary hover:bg-primary/50 text-primary-foreground",
+  secondary: "bg-secondary hover:bg-secondary/90 text-secondary-foreground",
   outline:
-    "border border-primary text-primary hover:bg-primary/10 cursor-pointer",
-  common:
-    "bg-primary hover:bg-primary/90 text-white border border-white inline-flex items-center justify-center gap-3 rounded-full px-7 py-2 font-medium transition-all duration-300 hover:scale-105 cursor-pointer",
+    "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+  ghost: "hover:bg-accent hover:text-accent-foreground",
+  common: "bg-gray-200 hover:bg-gray-300 text-gray-800",
 };
 
-const sizes: Record<NonNullable<ButtonProps["size"]>, string> = {
+// Define the possible sizes
+const sizeStyles = {
   sm: "h-9 px-3 text-sm",
-  md: "h-10 px-4 text-sm",
-  lg: "h-11 px-6 text-base",
+  md: "h-10 p-6",
+  lg: "h-11 px-10 text-lg",
   icon: "h-10 w-10",
 };
 
-export const Button: React.FC<ButtonProps> = ({
+// Define the possible icon positions
+type IconPosition = "left" | "right";
+
+interface BaseButtonProps {
+  text?: string;
+  icon?: React.ReactNode;
+  iconPosition?: IconPosition;
+  variant?: keyof typeof variantStyles;
+  size?: keyof typeof sizeStyles;
+  className?: string;
+  isOpen?: boolean;
+  animationIndex?: number;
+  children?: React.ReactNode;
+}
+
+interface LinkButtonProps extends BaseButtonProps {
+  href: string;
+  onClick?: React.MouseEventHandler<HTMLAnchorElement>;
+}
+
+interface ClickableButtonProps extends BaseButtonProps {
+  href?: never;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
+}
+
+// Union the two interfaces to ensure either href or onClick is provided, but not both
+type ButtonProps = LinkButtonProps | ClickableButtonProps;
+
+function Button({
   text,
-  href,
+  icon,
+  iconPosition = "right",
   variant = "primary",
   size = "md",
-  className,
+  className = "",
+  isOpen = false,
+  animationIndex = 0,
+  href,
   onClick,
-  icon,
-  iconPosition = "left",
-  disabled,
-}) => {
+  children,
+}: ButtonProps) {
+  // Determine the base styles
+  const baseStyles = `relative rounded-full flex items-center transition-all duration-300 cursor-pointer group transform font-medium justify-center
+    hover:scale-105 active:scale-90
+    ${variantStyles[variant]}
+    ${sizeStyles[size]}
+    ${isOpen ? "animate-mobile-menu-item" : ""}
+    ${className}`;
+
+  // Determine icon spacing based on position
+  const iconSpacing =
+    size === "icon" ? "" : iconPosition === "left" ? "mr-2" : "ml-2";
+
+  const content = (
+    <>
+      {icon && iconPosition === "left" && (
+        <span
+          className={`${iconSpacing} transition-transform duration-300 group-hover:translate-x-1`}
+        >
+          {icon}
+        </span>
+      )}
+      {text && <span>{text}</span>}
+      {children}
+      {icon && iconPosition === "right" && (
+        <span
+          className={`${iconSpacing} transition-transform duration-300 group-hover:-translate-x-1`}
+        >
+          {icon}
+        </span>
+      )}
+    </>
+  );
+
+  // If href is provided, render as Link, otherwise as button
   if (href) {
-    // Render as <a>
     return (
       <Link
-        href={disabled ? "#" : href}
-        className={cn(
-          base,
-          variants[variant],
-          sizes[size],
-          className,
-          disabled ? "opacity-50 cursor-not-allowed pointer-events-none" : ""
-        )}
+        href={href}
+        onClick={
+          onClick
+            ? (onClick as React.MouseEventHandler<HTMLAnchorElement>)
+            : undefined
+        }
+        className={baseStyles}
+        style={{
+          animationDelay: isOpen ? `${animationIndex * 80 + 150}ms` : "0ms",
+        }}
       >
-        {icon && iconPosition === "left" && (
-          <span className="mr-2">{icon}</span>
-        )}
-        {text}
-        {icon && iconPosition === "right" && (
-          <span className="ml-2">{icon}</span>
-        )}
+        {content}
       </Link>
     );
   }
 
-  // Render as <button>
   return (
     <button
-      onClick={onClick}
-      disabled={disabled}
-      className={cn(
-        base,
-        variants[variant],
-        sizes[size],
-        className,
-        disabled ? "opacity-50 cursor-not-allowed" : ""
-      )}
+      onClick={onClick as React.MouseEventHandler<HTMLButtonElement>}
+      className={baseStyles}
+      style={{
+        animationDelay: isOpen ? `${animationIndex * 80 + 150}ms` : "0ms",
+      }}
     >
-      {icon && iconPosition === "left" && <span className="mr-2">{icon}</span>}
-      {text}
-      {icon && iconPosition === "right" && <span className="ml-2">{icon}</span>}
+      {content}
     </button>
   );
-};
+}
+
+export default Button;
+export { Button };
